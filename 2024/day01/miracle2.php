@@ -12,22 +12,9 @@ $leftList = [];
 $rightList = [];
 
 while (($line = fgets($file)) !== false) {
-	$elem = array_filter(explode('   ', $line));
+	$elem = explode('   ', $line);
 	array_push($leftList, intval($elem[0]));
 	array_push($rightList, intval($elem[1]));
-}
-
-function c_min($arr) {
-	$min = [$arr[0], 0];
-	$length = count($arr);
-	
-	for ($i = 0; $i < $length; $i++) {
-		if ($arr[$i] < $min[0]) {
-			$min = [$arr[$i], $i];
-		}
-	}
-
-	return $min;
 }
 
 function c_count($number, $arr) {
@@ -40,23 +27,24 @@ function c_count($number, $arr) {
 	return $count;
 }
 
-if (count($leftList) !== count($rightList)) {
+$length = count($leftList);
+
+if ($length !== count($rightList)) {
 	throw "Error the two list are not the same length";
 }
 
-$length = count($leftList);
-$tmp = 0;
+
 
 $sum = 0;
-
 $stored = [];
 
 for ($i = 0; $i < $length; $i++) {
-	for ($i = 0; $i < count($leftList); $i++) {
+	for ($i = 0; $i < $length; $i++) {
 		$count = c_count($leftList[$i], $rightList);
 		array_push($stored, $leftList[$i] * $count);
 	}
 }
+
 for ($i = 0; $i < $length; $i++) {
 	$sum += $stored[$i];
 }
