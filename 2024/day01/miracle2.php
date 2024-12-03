@@ -30,6 +30,16 @@ function c_min($arr) {
 	return $min;
 }
 
+function c_count($number, $arr) {
+	$count = 0;
+	for ($i = 0; $i < count($arr); $i++) {
+		if ($number === $arr[$i]) {
+			$count++;
+		}
+	}
+	return $count;
+}
+
 if (count($leftList) !== count($rightList)) {
 	throw "Error the two list are not the same length";
 }
@@ -37,18 +47,18 @@ if (count($leftList) !== count($rightList)) {
 $length = count($leftList);
 $tmp = 0;
 
-$ordered1 = [];
-$ordered2 = [];
 $sum = 0;
 
-for ($i = 0; $i < $length; $i++) {
-	$minLeft = c_min($leftList);
-	$minRight = c_min($rightList);
-	
-	$sum += abs($minLeft[0] - $minRight[0]);
+$stored = [];
 
-	array_splice($leftList, $minLeft[1], 1);
-	array_splice($rightList, $minRight[1], 1);
+for ($i = 0; $i < $length; $i++) {
+	for ($i = 0; $i < count($leftList); $i++) {
+		$count = c_count($leftList[$i], $rightList);
+		array_push($stored, $leftList[$i] * $count);
+	}
+}
+for ($i = 0; $i < $length; $i++) {
+	$sum += $stored[$i];
 }
 
 echo $sum;
