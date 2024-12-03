@@ -16,41 +16,42 @@ while (($line = fgets($file)) !== false) {
 
 function checkLevel(&$report) {	
 	$state = 0;
-
-	for ($level = 0; $level < count($report[0]); $level++) {
-		$curr = intval($report[0][$level]);
+	$entries = count($report[0]);
+	for ($level = 0; $level < $entries; $level++) {
+		$current = intval($report[0][$level]);
 		
-		if ($level + 1 < count($report[0])) {
+		if ($level < $entries - 1) {
 			$next = intval($report[0][$level + 1]);
-			if ($curr > $next) {
+
+			if ($current > $next) {
 				if ($level !== 0 && $state !== 1) {
 					$report[1] = false;
 					return;
 				}
 				$state = 1;
 				//
-				$math = abs($curr - $next);
+				$math = abs($current - $next);
 				if ($math !== 0 && $math > 3) {
 					$report[1] = false;
 					return;
 				}
 			}
 			//
-			if ($curr < $next) {
+			if ($current < $next) {
 				if ($level !== 0 && $state !== 2) {
 					$report[1] = false;
 					return;
 				}
 				$state = 2;
 				//
-				$math = abs($next - $curr);
+				$math = abs($next - $current);
 				if ($math !== 0 && $math > 3) {
 					$report[1] = false;
 					return;
 				}
 			}
 
-			if ($curr === $next) {
+			if ($current === $next) {
 				$report[1] = false;
 				return;
 			}
