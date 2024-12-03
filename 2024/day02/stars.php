@@ -13,7 +13,6 @@ while (($line = fgets($file)) !== false) {
 	array_push($output, [explode(" ", trim($line)), true]);
 }
 
-$safes = [];
 
 function checkLevel(&$report) {	
 	$state = 0;
@@ -22,38 +21,38 @@ function checkLevel(&$report) {
 		$curr = intval($report[0][$level]);
 		
 		if ($level + 1 < count($report[0])) {
-			
-			if ($curr > intval($report[0][$level + 1])) {
+			$next = intval($report[0][$level + 1]);
+			if ($curr > $next) {
 				if ($level !== 0 && $state !== 1) {
 					$report[1] = false;
-					return false;
+					return;
 				}
 				$state = 1;
 				//
-				$math = abs($curr - intval($report[0][$level + 1]));
+				$math = abs($curr - $next);
 				if ($math !== 0 && $math > 3) {
 					$report[1] = false;
-					return false;
+					return;
 				}
 			}
 			//
-			if ($curr < intval($report[0][$level + 1])) {
+			if ($curr < $next) {
 				if ($level !== 0 && $state !== 2) {
 					$report[1] = false;
-					return false;
+					return;
 				}
 				$state = 2;
 				//
-				$math = abs(intval($report[0][$level + 1]) - $curr);
+				$math = abs($next - $curr);
 				if ($math !== 0 && $math > 3) {
 					$report[1] = false;
-					return false;
+					return;
 				}
 			}
 
-			if ($curr === intval($report[0][$level + 1])) {
+			if ($curr === $next) {
 				$report[1] = false;
-				return false;
+				return;
 			}
 
 		}
@@ -62,16 +61,14 @@ function checkLevel(&$report) {
 }
 
 for ($report = 0; $report < count($output); $report++) {
-	
 	$state = 0;
-	$result = checkLevel($output[$report]);
-	array_push($safes, $result);
+	checkLevel($output[$report]);
 }
 
 $count = 0;
 
-for ($result = 0; $result < count($safes); $result++) {
-	if ($safes[$result]) {
+for ($result = 0; $result < count($output); $result++) {
+	if ($output[$result][1]) {
 		$count++;
 	}
 }
