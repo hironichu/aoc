@@ -13,7 +13,7 @@ while (($line = fgets($file)) !== false) {
 	array_push($output, explode(" ", trim($line)));
 }
 
-function checkLevel($report) {	
+function checkLevel(array $report) {	
 	$isASC = true;
 	$isDESC = true;
 	$entries = count($report);
@@ -39,7 +39,7 @@ function checkLevel($report) {
 
 	return ($isASC || $isDESC);
 }
-function applyDampener(&$report, &$count) {
+function applyDampener(array &$report, int &$count) {
 	$state = 0;
 	$entries = count($report);
 	

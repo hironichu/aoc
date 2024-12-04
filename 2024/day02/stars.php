@@ -10,50 +10,45 @@ $file = @fopen("./$arg", 'rb') or die("Error: The file $arg does not exist.\n");
 
 $output = [];
 while (($line = fgets($file)) !== false) {
-	array_push($output, [explode(" ", trim($line)), true]);
+	array_push($output, explode(" ", trim($line)));
 }
 
 
-function checkLevel(&$report) {	
+function checkLevel(array $report) {	
 	$state = 0;
-	$entries = count($report[0]);
+	$entries = count($report);
 	for ($level = 0; $level < $entries; $level++) {
-		$current = intval($report[0][$level]);
+		$current = intval($report[$level]);
 		
-		if ($level < $entries - 1) {
-			$next = intval($report[0][$level + 1]);
+		if ($level < count($report) - 1) {
+			$next = intval($report[$level + 1]);
 
 			if ($current > $next) {
 				if ($level !== 0 && $state !== 1) {
-					$report[1] = false;
-					return;
+					return false ;
 				}
 				$state = 1;
 				//
 				$math = abs($current - $next);
 				if ($math !== 0 && $math > 3) {
-					$report[1] = false;
-					return;
+					return false;
 				}
 			}
 			//
 			if ($current < $next) {
 				if ($level !== 0 && $state !== 2) {
-					$report[1] = false;
-					return;
+					return false;
 				}
 				$state = 2;
 				//
 				$math = abs($next - $current);
 				if ($math !== 0 && $math > 3) {
-					$report[1] = false;
-					return;
+					return false;
 				}
 			}
 
 			if ($current === $next) {
-				$report[1] = false;
-				return;
+				return false;
 			}
 
 		}
@@ -61,15 +56,12 @@ function checkLevel(&$report) {
 	return true;
 }
 
-for ($report = 0; $report < count($output); $report++) {
-	$state = 0;
-	checkLevel($output[$report]);
-}
 
 $count = 0;
 
-for ($result = 0; $result < count($output); $result++) {
-	if ($output[$result][1]) {
+for ($report = 0; $report < count($output); $report++) {
+	$state = 0;
+	if (checkLevel($output[$report])) {
 		$count++;
 	}
 }

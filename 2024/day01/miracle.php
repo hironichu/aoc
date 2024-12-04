@@ -17,7 +17,7 @@ while (($line = fgets($file)) !== false) {
 	array_push($rightList, intval($elem[1]));
 }
 
-function c_min($arr) {
+function c_min(array $arr) {
 	$min = [$arr[0], 0];
 	$length = count($arr);
 	
